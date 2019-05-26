@@ -19,12 +19,12 @@ namespace SmartBoyDIno.GameObjects
         Texture2D dinoDead;
         SpriteFont font;
         bool duck;
-        int posX = 150;
+        public int posX = 150;
         float posY = 750;
         float ground = 750;
         int runCount = 0;
         private float velY = 0.0f;
-        private float gravity = 1.2f;
+        private float gravity = 0.7f;
         private int lifespan = 0;
         private int score;
 
@@ -86,7 +86,7 @@ namespace SmartBoyDIno.GameObjects
                 velY = 0;
                 posY = ground;
             }
-
+            //Control for human to play
             if (keyboardState.IsKeyDown(Keys.Up))
             {
                 Jump(false);
@@ -102,7 +102,6 @@ namespace SmartBoyDIno.GameObjects
             }
 
             IncrementPoints();
-
         }
         void Jump(bool bigJump)
         {

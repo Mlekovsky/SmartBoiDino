@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="ExtendedSpriteBatch.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObjects\Bird.cs" />
+    <Compile Include="GameObjects\Cactus.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
