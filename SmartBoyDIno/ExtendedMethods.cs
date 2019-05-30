@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartBoyDIno
 {
-    public static class ExtendedSpriteBatch
+    public static class ExtendedMethods
     {
         private static Texture2D _texture;
         private static Texture2D GetTexture(SpriteBatch spriteBatch)

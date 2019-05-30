@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using SmartBoyDIno.GameObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SmartBoyDIno
 {
@@ -33,6 +34,7 @@ namespace SmartBoyDIno
         int minimumTimeBetweenObstacles = 60;
         double randomAdd = 0;
         double maxRandomAdd = 50;
+        bool gameOver = false;
 
         float ground = 750;
         float gameSpeed = 10;
@@ -86,10 +88,15 @@ namespace SmartBoyDIno
                 Exit();
 
             keyboard = Keyboard.GetState();
-            tempGenPlayer.Update(gameTime, keyboard);
-            UpdateObstacles();
-            MoveObstacles();
+            tempGenPlayer.Update(gameTime, keyboard, gameOver);
+            if (!gameOver)
+            {
+                UpdateObstacles();
+                MoveObstacles();
 
+                gameOver = (from berd in berds where berd.PlayerTouched(tempGenPlayer) select berd).Any();
+                gameOver = (from cacti in cactuses where cacti.PlayerTouched(tempGenPlayer) select cacti).Any();
+            }
 
             base.Update(gameTime);
         }
@@ -124,7 +131,7 @@ namespace SmartBoyDIno
             int tempForType = random.Next(1, 4);
             int berdChance = random.Next(0, 101);
 
-            if (berdChance < 15)
+            if (berdChance > 15)
             {
                 Bird temp = new Bird(tempForType, windowWidth, bird1, bird2);
                 berds.Add(temp);
@@ -144,21 +151,43 @@ namespace SmartBoyDIno
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
             spriteBatch.DrawLine(new Vector2(0, ground), new Vector2(Window.ClientBounds.Width, ground), Color.Black, 3);
+
             tempGenPlayer.Draw(spriteBatch, gameTime);
 
             for (int i = 0; i < cactuses.Count; i++)
             {
                 cactuses[i].Draw(spriteBatch, gameTime);
+                if (DebugClass.displayObjectsInfo)
+                {
+                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Cactus", new Vector2(500, 70), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Bottom: {cactuses[0].getTextureRectangle().Bottom} ", new Vector2(500, 100), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Top: {cactuses[0].getTextureRectangle().Top} ", new Vector2(500, 130), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"X: {cactuses[0].getTextureRectangle().X} ", new Vector2(500, 160), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Y: {cactuses[0].getTextureRectangle().Y} ", new Vector2(500, 190), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Width: {cactuses[0].getTextureRectangle().Width} ", new Vector2(500, 220), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Height: {cactuses[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
+                }
+
                 if (cactuses[i].posX < tempGenPlayer.posX)
                 {
                     cactuses.RemoveAt(i);
                     i--;
                 }
-
             }
 
             for (int i = 0; i < berds.Count; i++)
             {
+                if (DebugClass.displayObjectsInfo)
+                {
+                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Bird {berds[0].getTextureRectangle().Bottom} ", new Vector2(500, 70), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Bottom: {berds[0].getTextureRectangle().Bottom} ", new Vector2(500, 100), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Top: {berds[0].getTextureRectangle().Top} ", new Vector2(500, 130), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"X: {berds[0].getTextureRectangle().X} ", new Vector2(500, 160), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Y: {berds[0].getTextureRectangle().Y} ", new Vector2(500, 190), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Width: {berds[0].getTextureRectangle().Width} ", new Vector2(500, 220), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Height: {berds[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
+                }
+
                 berds[i].Draw(spriteBatch, gameTime);
                 if (berds[i].posX < tempGenPlayer.posX)
                 {

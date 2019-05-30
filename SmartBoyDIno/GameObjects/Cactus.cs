@@ -9,37 +9,34 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SmartBoyDIno.GameObjects
 {
-    public class Cactus
+    public class Cactus : BaseEnemy
     {
-        Texture2D currentCactus;
-
-        public float posX;
         int w;
         int h;
         int type;
-        int posY = 750;
 
         public Cactus(int t, int windowXSize, Texture2D small, Texture2D big, Texture2D manySmall)
         {
             posX = windowXSize;
+            posY = 750;
             type = t;
             switch (type)
             {
                 case 1:
                     w = 40;
                     h = 80;
-                    currentCactus = small;
+                    currentTexture = small;
                     ;
                     break;
                 case 2:
                     w = 60;
                     h = 120;
-                    currentCactus = big;
+                    currentTexture = big;
                     break;
                 case 3:
                     w = 120;
                     h = 80;
-                    currentCactus = manySmall;
+                    currentTexture = manySmall;
                     break;
                 default:
                     break;
@@ -48,7 +45,7 @@ namespace SmartBoyDIno.GameObjects
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(currentCactus, new Vector2(posX - (currentCactus.Width / 2), posY - currentCactus.Height));
+            spriteBatch.Draw(currentTexture, new Vector2(posX - (currentTexture.Width / 2), posY - currentTexture.Height));
         }
         public void Update(float gameSpeed)
         {

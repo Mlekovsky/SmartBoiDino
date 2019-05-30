@@ -9,12 +9,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SmartBoyDIno.GameObjects
 {
-    public class Bird
+    public class Bird : BaseEnemy
     {
         float w = 60;
         float h = 50;
-        public float posX;
-        float posY;
         int flaps;
         int groundHeight = 750;
         Texture2D bird1;
@@ -28,7 +26,7 @@ namespace SmartBoyDIno.GameObjects
             switch (type)
             {
                 case 1: // low rider
-                    posY = groundHeight - 5; 
+                    posY = groundHeight - 5;
                     break;
                 case 2: //mid rider
                     posY = groundHeight - 60;
@@ -44,21 +42,23 @@ namespace SmartBoyDIno.GameObjects
         public void Update(float gameSpeed)
         {
             posX -= gameSpeed;
-        }
 
-        public void Draw(SpriteBatch spriteBatch ,GameTime gameTime)
-        {
             flaps++;
-            if(flaps > 10)
+            if (flaps > 10)
             {
-                spriteBatch.Draw(bird1, new Vector2(posX - bird1.Width/2, posY - bird1.Height));
+                currentTexture = bird1;
             }
             else
-            {
-                spriteBatch.Draw(bird2, new Vector2(posX - bird2.Width / 2, posY - bird2.Height));
+            {          
+                currentTexture = bird2;
             }
             if (flaps > 10)
                 flaps -= 10;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            spriteBatch.Draw(currentTexture, new Vector2(posX - currentTexture.Width / 2, posY - currentTexture.Height));
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SmartBoyDIno.GameObjects
 {
-    public class Player
+    public class Player : BaseGameObject
     {
         Texture2D dinoRun1;
         Texture2D dinoRun2;
@@ -19,14 +19,13 @@ namespace SmartBoyDIno.GameObjects
         Texture2D dinoDead;
         SpriteFont font;
         bool duck;
-        public int posX = 150;
-        float posY = 750;
         float ground = 750;
         int runCount = 0;
         private float velY = 0.0f;
         private float gravity = 0.7f;
         private int lifespan = 0;
         private int score;
+        bool gameOver = false;
 
         public Player(Texture2D dino1, Texture2D dino2, Texture2D dinoDuck1, Texture2D dinoDuck2, Texture2D dinoJump, Texture2D dinoDead, SpriteFont font)
         {
@@ -37,45 +36,31 @@ namespace SmartBoyDIno.GameObjects
             this.dinoJump = dinoJump;
             this.dinoDead = dinoDead;
             this.font = font;
+            posX = 150;
+            posY = 750;
         }
+
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            if (duck && posY == ground)
-            {
-                if (runCount < 5)
-                {
-                    spriteBatch.Draw(dinoDuck1, new Vector2(posX - dinoDuck2.Width / 2, posY - dinoDuck2.Height));
-                }
-                else
-                {
-                    spriteBatch.Draw(dinoDuck2, new Vector2(posX - dinoDuck1.Width / 2, posY - dinoDuck1.Height));
-                }
-            }
-            else if (posY == ground)
-            {
-                if (runCount < 5)
-                {
-                    spriteBatch.Draw(dinoRun1, new Vector2(posX - dinoRun1.Width / 2, posY - dinoRun1.Height));
-                }
-                else
-                {
-                    spriteBatch.Draw(dinoRun2, new Vector2(posX - dinoRun2.Width / 2, posY - dinoRun2.Height));
-                }
-            }
-            else
-            {
-                spriteBatch.Draw(dinoJump, new Vector2(posX - dinoJump.Width / 2, posY - dinoJump.Height));
-            }
-            runCount++;
-            if (runCount > 10)
-            {
-                runCount -= 10;
-            }
-
+            spriteBatch.Draw(currentTexture, new Vector2(posX - currentTexture.Width / 2, posY - currentTexture.Height));
             spriteBatch.DrawString(font, $"Score: {score}", new Vector2(100, 100), Color.Black);
+
+            if (DebugClass.displayObjectsInfo)
+            {
+                spriteBatch.DrawString(font, $"Player positions", new Vector2(250, 70), Color.Black);
+                spriteBatch.DrawString(font, $"Bottom: {getTextureRectangle().Bottom} ", new Vector2(250, 100), Color.Black);
+                spriteBatch.DrawString(font, $"Top: {getTextureRectangle().Top} ", new Vector2(250, 130), Color.Black);
+                spriteBatch.DrawString(font, $"X: {getTextureRectangle().X} ", new Vector2(250, 160), Color.Black);
+                spriteBatch.DrawString(font, $"Y: {getTextureRectangle().Y} ", new Vector2(250, 190), Color.Black);
+                spriteBatch.DrawString(font, $"Width: {getTextureRectangle().Width} ", new Vector2(250, 220), Color.Black);
+                spriteBatch.DrawString(font, $"Height: {getTextureRectangle().Height} ", new Vector2(250, 250), Color.Black);
+            }
         }
-        public void Update(GameTime gameTime, KeyboardState keyboardState)
+
+        public void Update(GameTime gameTime, KeyboardState keyboardState, bool gameOver)
         {
+            this.gameOver = gameOver;
+            //gravity stuff
             posY -= velY;
             if (posY < ground)
             {
@@ -86,23 +71,67 @@ namespace SmartBoyDIno.GameObjects
                 velY = 0;
                 posY = ground;
             }
-            //Control for human to play
-            if (keyboardState.IsKeyDown(Keys.Up))
-            {
-                Jump(false);
-            }
-            if (keyboardState.IsKeyDown(Keys.Down))
-            {
-                duck = true;
-                Ducking(duck);
-            }
-            if (!keyboardState.IsKeyDown(Keys.Down))
-            {
-                duck = false;
-            }
 
-            IncrementPoints();
+            //chaning current texture which will be displayed and handle inputs
+            if (!gameOver)
+            {
+                if (duck && posY == ground)
+                {
+                    if (runCount < 5)
+                    {
+                        currentTexture = dinoDuck1;
+                    }
+                    else
+                    {
+                        currentTexture = dinoDuck2;
+                    }
+                }
+                else if (posY == ground)
+                {
+                    if (runCount < 5)
+                    {
+                        currentTexture = dinoRun1;
+                    }
+                    else
+                    {
+
+                        currentTexture = dinoRun2;
+                    }
+                }
+                else
+                {
+                    currentTexture = dinoJump;
+                }
+
+                runCount++;
+                if (runCount > 10)
+                {
+                    runCount -= 10;
+                }
+
+                //Control for human to play
+                if (keyboardState.IsKeyDown(Keys.Up))
+                {
+                    Jump(true);
+                }
+                if (keyboardState.IsKeyDown(Keys.Down))
+                {
+                    duck = true;
+                    Ducking(duck);
+                }
+                if (!keyboardState.IsKeyDown(Keys.Down))
+                {
+                    duck = false;
+                }
+
+                IncrementPoints();
+            }
+            else
+            {
+                //currentTexture = dinoDead;
+            }
         }
+
         void Jump(bool bigJump)
         {
             if (posY == ground)
