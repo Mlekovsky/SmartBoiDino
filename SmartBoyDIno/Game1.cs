@@ -35,6 +35,7 @@ namespace SmartBoyDIno
         double randomAdd = 0;
         double maxRandomAdd = 50;
         bool gameOver = false;
+        bool stopGame = false;
 
         float ground = 750;
         float gameSpeed = 10;
@@ -88,7 +89,7 @@ namespace SmartBoyDIno
                 Exit();
 
             keyboard = Keyboard.GetState();
-            tempGenPlayer.Update(gameTime, keyboard, gameOver);
+            tempGenPlayer.Update(gameTime, keyboard, ref gameOver);
             if (!gameOver)
             {
                 UpdateObstacles();
@@ -103,8 +104,6 @@ namespace SmartBoyDIno
 
         private void MoveObstacles()
         {
-            Console.WriteLine($"Current speed: {gameSpeed}");
-
             foreach (var cacti in cactuses)
             {
                 cacti.Update(gameSpeed);
@@ -131,7 +130,7 @@ namespace SmartBoyDIno
             int tempForType = random.Next(1, 4);
             int berdChance = random.Next(0, 101);
 
-            if (berdChance > 15)
+            if (berdChance > 50)
             {
                 Bird temp = new Bird(tempForType, windowWidth, bird1, bird2);
                 berds.Add(temp);
@@ -153,6 +152,7 @@ namespace SmartBoyDIno
             spriteBatch.DrawLine(new Vector2(0, ground), new Vector2(Window.ClientBounds.Width, ground), Color.Black, 3);
 
             tempGenPlayer.Draw(spriteBatch, gameTime);
+            spriteBatch.DrawString(scoreFont, $"Current game speed: {gameSpeed}", new Vector2(50, 130), Color.Black);
 
             for (int i = 0; i < cactuses.Count; i++)
             {
@@ -162,8 +162,8 @@ namespace SmartBoyDIno
                     spriteBatch.DrawString(scoreFont, $"Currenct closest object: Cactus", new Vector2(500, 70), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Bottom: {cactuses[0].getTextureRectangle().Bottom} ", new Vector2(500, 100), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Top: {cactuses[0].getTextureRectangle().Top} ", new Vector2(500, 130), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"X: {cactuses[0].getTextureRectangle().X} ", new Vector2(500, 160), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Y: {cactuses[0].getTextureRectangle().Y} ", new Vector2(500, 190), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Left: {cactuses[0].getTextureRectangle().Left} ", new Vector2(500, 160), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Right: {cactuses[0].getTextureRectangle().Right} ", new Vector2(500, 190), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Width: {cactuses[0].getTextureRectangle().Width} ", new Vector2(500, 220), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Height: {cactuses[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
                 }
@@ -179,11 +179,11 @@ namespace SmartBoyDIno
             {
                 if (DebugClass.displayObjectsInfo)
                 {
-                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Bird {berds[0].getTextureRectangle().Bottom} ", new Vector2(500, 70), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Bird", new Vector2(500, 70), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Bottom: {berds[0].getTextureRectangle().Bottom} ", new Vector2(500, 100), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Top: {berds[0].getTextureRectangle().Top} ", new Vector2(500, 130), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"X: {berds[0].getTextureRectangle().X} ", new Vector2(500, 160), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Y: {berds[0].getTextureRectangle().Y} ", new Vector2(500, 190), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Left: {berds[0].getTextureRectangle().Left} ", new Vector2(500, 160), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Right: {berds[0].getTextureRectangle().Right} ", new Vector2(500, 190), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Width: {berds[0].getTextureRectangle().Width} ", new Vector2(500, 220), Color.Black);
                     spriteBatch.DrawString(scoreFont, $"Height: {berds[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
                 }

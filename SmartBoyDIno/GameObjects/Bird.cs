@@ -11,8 +11,6 @@ namespace SmartBoyDIno.GameObjects
 {
     public class Bird : BaseEnemy
     {
-        float w = 60;
-        float h = 50;
         int flaps;
         int groundHeight = 750;
         Texture2D bird1;
@@ -20,18 +18,21 @@ namespace SmartBoyDIno.GameObjects
 
         public Bird(int type, int windowXSize, Texture2D bird1, Texture2D bird2)
         {
+            w = 60;
+            h = 50;
             posX = windowXSize;
             this.bird1 = bird1;
             this.bird2 = bird2;
+            this.type = type;
             switch (type)
             {
-                case 1: // low rider
+                case 1: // low
                     posY = groundHeight - 5;
                     break;
-                case 2: //mid rider
+                case 2: // mid
                     posY = groundHeight - 60;
                     break;
-                case 3: // high rider
+                case 3: // high
                     posY = groundHeight - 120;
                     break;
                 default:
@@ -58,7 +59,7 @@ namespace SmartBoyDIno.GameObjects
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(currentTexture, new Vector2(posX - currentTexture.Width / 2, posY - currentTexture.Height));
+            spriteBatch.Draw(currentTexture, new Vector2(posX - (currentTexture.Width / 2), posY - currentTexture.Height));
         }
     }
 }

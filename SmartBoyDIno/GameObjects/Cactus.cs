@@ -11,10 +11,6 @@ namespace SmartBoyDIno.GameObjects
 {
     public class Cactus : BaseEnemy
     {
-        int w;
-        int h;
-        int type;
-
         public Cactus(int t, int windowXSize, Texture2D small, Texture2D big, Texture2D manySmall)
         {
             posX = windowXSize;
@@ -25,8 +21,7 @@ namespace SmartBoyDIno.GameObjects
                 case 1:
                     w = 40;
                     h = 80;
-                    currentTexture = small;
-                    ;
+                    currentTexture = small;                   
                     break;
                 case 2:
                     w = 60;

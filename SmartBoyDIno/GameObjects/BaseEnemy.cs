@@ -10,13 +10,17 @@ namespace SmartBoyDIno.GameObjects
 {
     public class BaseEnemy : BaseGameObject
     {
+        public int w;
+        public int h;
+        public int type;
+
         public BaseEnemy()
         {
         }
 
         public bool PlayerTouched(Player player)
         {
-            return new Rectangle
+            return new Rectangle // tu mi coś ewidentnie nie działa
             {
                 X = (int)player.posX - player.currentTexture.Width,
                 Y = (int)player.posY - player.currentTexture.Height,

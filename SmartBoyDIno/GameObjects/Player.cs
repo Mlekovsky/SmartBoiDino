@@ -42,24 +42,23 @@ namespace SmartBoyDIno.GameObjects
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(currentTexture, new Vector2(posX - currentTexture.Width / 2, posY - currentTexture.Height));
-            spriteBatch.DrawString(font, $"Score: {score}", new Vector2(100, 100), Color.Black);
+            spriteBatch.Draw(currentTexture, new Vector2(posX - (currentTexture.Width / 2), posY - currentTexture.Height));
+            spriteBatch.DrawString(font, $"Score: {score}", new Vector2(50, 100), Color.Black);
 
             if (DebugClass.displayObjectsInfo)
             {
                 spriteBatch.DrawString(font, $"Player positions", new Vector2(250, 70), Color.Black);
                 spriteBatch.DrawString(font, $"Bottom: {getTextureRectangle().Bottom} ", new Vector2(250, 100), Color.Black);
                 spriteBatch.DrawString(font, $"Top: {getTextureRectangle().Top} ", new Vector2(250, 130), Color.Black);
-                spriteBatch.DrawString(font, $"X: {getTextureRectangle().X} ", new Vector2(250, 160), Color.Black);
-                spriteBatch.DrawString(font, $"Y: {getTextureRectangle().Y} ", new Vector2(250, 190), Color.Black);
+                spriteBatch.DrawString(font, $"Left: {getTextureRectangle().Left} ", new Vector2(250, 160), Color.Black);
+                spriteBatch.DrawString(font, $"Right: {getTextureRectangle().Right} ", new Vector2(250, 190), Color.Black);
                 spriteBatch.DrawString(font, $"Width: {getTextureRectangle().Width} ", new Vector2(250, 220), Color.Black);
                 spriteBatch.DrawString(font, $"Height: {getTextureRectangle().Height} ", new Vector2(250, 250), Color.Black);
             }
         }
 
-        public void Update(GameTime gameTime, KeyboardState keyboardState, bool gameOver)
+        public void Update(GameTime gameTime, KeyboardState keyboardState, ref bool gameOver)
         {
-            this.gameOver = gameOver;
             //gravity stuff
             posY -= velY;
             if (posY < ground)
@@ -123,12 +122,20 @@ namespace SmartBoyDIno.GameObjects
                 {
                     duck = false;
                 }
+                if (keyboardState.IsKeyDown(Keys.S)) // for test purpose lets implement "pause-like" mechanism, reference works too slow for now
+                {
+                    gameOver = true;
+                }
 
                 IncrementPoints();
             }
             else
             {
                 //currentTexture = dinoDead;
+                if (keyboardState.IsKeyDown(Keys.S))
+                {
+                    gameOver = false;
+                }
             }
         }
 
