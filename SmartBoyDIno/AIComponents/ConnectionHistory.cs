@@ -24,7 +24,21 @@ namespace SmartBoyDIno.AIComponents
 
         public bool matches(Genome genome, Node from, Node to)
         {
-            //TODO: finish this
+            if(genome.genes.Count == innovationNumbers.Count)
+            {
+                if(from.number == fromNode && to.number == toNode)
+                {
+                    foreach(var gene in genome.genes)
+                    {
+                        if(!innovationNumbers.Contains(gene.innovationNo))
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            }
             return false;
         }
     }
