@@ -90,6 +90,8 @@ namespace SmartBoyDIno
 
             keyboard = Keyboard.GetState();
             tempGenPlayer.Update(gameTime, keyboard, ref gameOver);
+            HandleDebugControls(keyboard);
+
             if (!gameOver)
             {
                 UpdateObstacles();
@@ -100,6 +102,18 @@ namespace SmartBoyDIno
             }
 
             base.Update(gameTime);
+        }
+
+        private void HandleDebugControls(KeyboardState keyboard)
+        {
+            if (keyboard.IsKeyDown(Keys.D))
+            {
+                DebugClass.displayObjectsInfo = !DebugClass.displayObjectsInfo;
+            }
+            if (keyboard.IsKeyDown(Keys.S))
+            {
+                gameOver = !gameOver;
+            }
         }
 
         private void MoveObstacles()

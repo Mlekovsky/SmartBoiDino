@@ -124,20 +124,12 @@ namespace SmartBoyDIno.GameObjects
                 {
                     duck = false;
                 }
-                if (keyboardState.IsKeyDown(Keys.S)) // for test purpose lets implement "pause-like" mechanism, reference works too slow for now
-                {
-                    gameOver = true;
-                }
 
                 IncrementPoints();
             }
             else
             {
-                //currentTexture = dinoDead;
-                if (keyboardState.IsKeyDown(Keys.S))
-                {
-                    gameOver = false;
-                }
+                //currentTexture = dinoDead; //waiting for new texture :( 
             }
         }
 
