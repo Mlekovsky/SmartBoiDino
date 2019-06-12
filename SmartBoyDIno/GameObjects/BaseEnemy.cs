@@ -20,7 +20,7 @@ namespace SmartBoyDIno.GameObjects
 
         public bool PlayerTouched(Player player)
         {
-            return new Rectangle // tu mi coś ewidentnie nie działa
+            return new Rectangle
             {
                 X = (int)player.posX - player.currentTexture.Width / 2,
                 Y = (int)player.posY - player.currentTexture.Height,
