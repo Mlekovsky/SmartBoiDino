@@ -97,11 +97,16 @@ namespace SmartBoyDIno
                 UpdateObstacles();
                 MoveObstacles();
 
-                gameOver = (from berd in berds where berd.PlayerTouched(tempGenPlayer) select berd).Any();
-                gameOver = (from cacti in cactuses where cacti.PlayerTouched(tempGenPlayer) select cacti).Any();
+                gameOver = HandleCollision();
             }
 
             base.Update(gameTime);
+        }
+
+        private bool HandleCollision()
+        {
+            return (from berd in berds where berd.PlayerTouched(tempGenPlayer) select berd).Any()
+               || (from cacti in cactuses where cacti.PlayerTouched(tempGenPlayer) select cacti).Any();
         }
 
         private void HandleDebugControls(KeyboardState keyboard)
