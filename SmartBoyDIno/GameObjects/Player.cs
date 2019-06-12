@@ -54,6 +54,8 @@ namespace SmartBoyDIno.GameObjects
                 spriteBatch.DrawString(font, $"Right: {getTextureRectangle().Right} ", new Vector2(250, 190), Color.Black);
                 spriteBatch.DrawString(font, $"Width: {getTextureRectangle().Width} ", new Vector2(250, 220), Color.Black);
                 spriteBatch.DrawString(font, $"Height: {getTextureRectangle().Height} ", new Vector2(250, 250), Color.Black);
+
+                DrawRectangle(spriteBatch);
             }
         }
 

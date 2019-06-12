@@ -24,5 +24,13 @@ namespace SmartBoyDIno.GameObjects
                 Width = this.currentTexture.Width
             };
         }
+
+        public void DrawRectangle(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawLine(new Vector2(posX - currentTexture.Width / 2, posY - currentTexture.Height), new Vector2(posX + currentTexture.Width / 2, posY - currentTexture.Height), Color.Red);
+            spriteBatch.DrawLine(new Vector2(posX - currentTexture.Width / 2, posY), new Vector2(posX + currentTexture.Width / 2, posY), Color.Red);
+            spriteBatch.DrawLine(new Vector2(posX - currentTexture.Width / 2, posY - currentTexture.Height), new Vector2(posX - currentTexture.Width / 2, posY), Color.Red);
+            spriteBatch.DrawLine(new Vector2(posX + currentTexture.Width / 2, posY - currentTexture.Height), new Vector2(posX + currentTexture.Width / 2, posY), Color.Red);
+        }
     }
 }

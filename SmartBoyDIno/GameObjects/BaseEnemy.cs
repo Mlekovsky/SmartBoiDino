@@ -22,14 +22,14 @@ namespace SmartBoyDIno.GameObjects
         {
             return new Rectangle // tu mi coś ewidentnie nie działa
             {
-                X = (int)player.posX - player.currentTexture.Width,
+                X = (int)player.posX - player.currentTexture.Width / 2,
                 Y = (int)player.posY - player.currentTexture.Height,
                 Height = player.currentTexture.Height,
                 Width = player.currentTexture.Width
             }.Intersects(
                     new Rectangle
                     {
-                        X = (int)this.posX - this.currentTexture.Width,
+                        X = (int)this.posX - this.currentTexture.Width / 2,
                         Y = (int)this.posY - this.currentTexture.Height,
                         Height = this.currentTexture.Height,
                         Width = this.currentTexture.Width,

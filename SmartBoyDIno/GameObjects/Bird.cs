@@ -60,6 +60,11 @@ namespace SmartBoyDIno.GameObjects
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             spriteBatch.Draw(currentTexture, new Vector2(posX - (currentTexture.Width / 2), posY - currentTexture.Height));
+
+            if (DebugClass.displayObjectsInfo)
+            {
+                DrawRectangle(spriteBatch);
+            }
         }
     }
 }
