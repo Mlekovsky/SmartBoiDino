@@ -30,10 +30,10 @@ namespace SmartBoyDIno.GameObjects
                     posY = groundHeight - 5;
                     break;
                 case 2: // mid
-                    posY = groundHeight - 60;
+                    posY = groundHeight - 70;
                     break;
                 case 3: // high
-                    posY = groundHeight - 120;
+                    posY = groundHeight - 130;
                     break;
                 default:
                     break;

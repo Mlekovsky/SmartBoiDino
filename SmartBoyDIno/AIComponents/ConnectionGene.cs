@@ -26,7 +26,7 @@ namespace SmartBoyDIno.AIComponents
             innovationNo = innovation;
         }
 
-        public void mutateWeight()
+        public void MutateWeight()
         {
             Random random = new Random();
             double rand = random.NextDouble();

@@ -22,7 +22,7 @@ namespace SmartBoyDIno.AIComponents
             this.innovationNumbers = new List<int>(innovationNumbers);
         }
 
-        public bool matches(Genome genome, Node from, Node to)
+        public bool Matches(Genome genome, Node from, Node to)
         {
             if(genome.genes.Count == innovationNumbers.Count)
             {
