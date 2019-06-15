@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,6 +36,7 @@
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -47,6 +49,8 @@
     <Compile Include="AIComponents\ConnectionHistory.cs" />
     <Compile Include="AIComponents\Genome.cs" />
     <Compile Include="AIComponents\Node.cs" />
+    <Compile Include="AIComponents\Population.cs" />
+    <Compile Include="AIComponents\Species.cs" />
     <Compile Include="ExtendedMethods.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObjects\BaseEnemy.cs" />
@@ -55,6 +59,7 @@
     <Compile Include="GameObjects\Cactus.cs" />
     <Compile Include="DebugClass.cs" />
     <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="Helpers\DinoTextures.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

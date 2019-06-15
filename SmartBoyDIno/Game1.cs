@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SmartBoyDIno.AIComponents;
 using SmartBoyDIno.GameObjects;
+using SmartBoyDIno.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +28,12 @@ namespace SmartBoyDIno
         Texture2D dinoDuck2;
         SpriteFont scoreFont;
         KeyboardState keyboard;
+        DinoTextures dinoTextures;
 
         List<Cactus> cactuses = new List<Cactus>();
         List<Bird> berds = new List<Bird>();
+        Population population;
+        int upToGen = 0;
 
         int obstacleTimer;
         int minimumTimeBetweenObstacles = 60;
@@ -59,6 +64,7 @@ namespace SmartBoyDIno
         {
             #region LoadImages
 
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             dino1 = this.Content.Load<Texture2D>("dinorun0000");
             dino2 = this.Content.Load<Texture2D>("dinorun0001");
@@ -73,9 +79,16 @@ namespace SmartBoyDIno
             cactusSmallMany = this.Content.Load<Texture2D>("ManySmallCactus");
             scoreFont = this.Content.Load<SpriteFont>("Score");
 
+            dinoTextures = new DinoTextures(dino1, dino2, dinoDuck1, dinoDuck2, dinoJump, dinoDead, scoreFont);
             #endregion
 
-            tempGenPlayer = new Player(dino1, dino2, dinoDuck1, dinoDuck2, dinoJump, dinoDead, scoreFont);
+            if (DebugClass.AiGameplay)
+                population = new Population(500, dinoTextures);
+            else
+                tempGenPlayer = new Player(dinoTextures);
+
+            // tempGenPlayer = new Player(dino1, dino2, dinoDuck1, dinoDuck2, dinoJump, dinoDead, scoreFont);
+
 
         }
 
@@ -87,17 +100,33 @@ namespace SmartBoyDIno
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            keyboard = Keyboard.GetState();
-            tempGenPlayer.Update(gameTime, keyboard, ref gameOver);
-            HandleDebugControls(keyboard);
-
-            if (!gameOver)
+            if (DebugClass.AiGameplay)
             {
-                UpdateObstacles();
-                MoveObstacles();
+                if (!population.Done())
+                {
+                    UpdateObstacles();
+                    MoveObstacles();
+                    population.UpdateAlive(gameTime, cactuses, berds, gameSpeed);
+                }
+                else
+                {
+                    population.NaturalSelection();
+                    ResetObstacle();
+                }
+            }
+            else
+            {
+                keyboard = Keyboard.GetState();
+                tempGenPlayer.Update(gameTime, keyboard, ref gameOver);
+                HandleDebugControls(keyboard);
 
-                gameOver = HandleCollision();
+                if (!gameOver)
+                {
+                    UpdateObstacles();
+                    MoveObstacles();
+
+                    gameOver = HandleCollision();
+                }
             }
 
             base.Update(gameTime);
@@ -149,7 +178,7 @@ namespace SmartBoyDIno
             int tempForType = random.Next(1, 4);
             int berdChance = random.Next(0, 101);
 
-            if (berdChance > 50)
+            if (berdChance < 15)
             {
                 Bird temp = new Bird(tempForType, windowWidth, bird1, bird2);
                 berds.Add(temp);
@@ -164,14 +193,34 @@ namespace SmartBoyDIno
             obstacleTimer = 0;
         }
 
+        private void ResetObstacle()
+        {
+            cactuses = new List<Cactus>();
+            berds = new List<Bird>();
+            obstacleTimer = 0;
+            randomAdd = 0;
+            gameSpeed = 10;
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
             spriteBatch.DrawLine(new Vector2(0, ground), new Vector2(Window.ClientBounds.Width, ground), Color.Black, 3);
+            spriteBatch.DrawString(scoreFont, $"Game speed: {gameSpeed}", new Vector2(50, 130), Color.Black);
 
-            tempGenPlayer.Draw(spriteBatch, gameTime);
-            spriteBatch.DrawString(scoreFont, $"Current game speed: {gameSpeed}", new Vector2(50, 130), Color.Black);
+            if (DebugClass.AiGameplay)
+            {
+                spriteBatch.DrawString(scoreFont, $"Generation: {population.gen}", new Vector2(50, 160), Color.Black);
+                if (!population.Done())
+                    population.DrawAlive(gameTime, spriteBatch);
+
+            }
+            else
+            {
+                tempGenPlayer.Draw(spriteBatch, gameTime);
+            }
+
 
             for (int i = 0; i < cactuses.Count; i++)
             {
@@ -187,7 +236,7 @@ namespace SmartBoyDIno
                     spriteBatch.DrawString(scoreFont, $"Height: {cactuses[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
                 }
 
-                if (cactuses[i].posX < tempGenPlayer.posX)
+                if (cactuses[i].posX < 100)
                 {
                     cactuses.RemoveAt(i);
                     i--;
@@ -208,7 +257,7 @@ namespace SmartBoyDIno
                 }
 
                 berds[i].Draw(spriteBatch, gameTime);
-                if (berds[i].posX < tempGenPlayer.posX)
+                if (berds[i].posX < 100)
                 {
                     berds.RemoveAt(i);
                     i--;

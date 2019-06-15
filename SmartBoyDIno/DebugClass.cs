@@ -8,6 +8,7 @@ namespace SmartBoyDIno
 {
     public class DebugClass
     {
-        public static bool displayObjectsInfo = true;
+        public static bool displayObjectsInfo = false;
+        public static bool AiGameplay = true;
     }
 }

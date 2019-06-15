@@ -44,7 +44,7 @@ namespace SmartBoyDIno
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
                          Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
             double randNormal = 100 + 10 * randStdNormal; //random normal(mean,stdDev^2)
-            return randNormal;
+            return randStdNormal;
         }
         public static double NextDouble(this Random random, double minValue, double maxValue)
         {
