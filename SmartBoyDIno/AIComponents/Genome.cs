@@ -15,7 +15,7 @@ namespace SmartBoyDIno.AIComponents
         public int layers = 2;
         public int nextNode = 0;
         public int biasNode;
-        public int nextConnectionNo = 1000;
+       // public int nextConnectionNo = 1000;
 
         public List<Node> network = new List<Node>();
 
@@ -172,7 +172,7 @@ namespace SmartBoyDIno.AIComponents
         private int GetInnovationNumber(List<ConnectionHistory> innovationHistory, Node from, Node to)
         {
             bool isNew = true;
-            int connectionInnovationNumber = nextConnectionNo; // come back to this, make it global
+            int connectionInnovationNumber = Game1.nextConnectionNo; // come back to this, make it global
 
             foreach (var innovation in innovationHistory)
             {
@@ -193,7 +193,7 @@ namespace SmartBoyDIno.AIComponents
                 }
 
                 innovationHistory.Add(new ConnectionHistory(from.number, to.number, connectionInnovationNumber, innovNumbers));
-                nextConnectionNo++;
+                Game1.nextConnectionNo++;
             }
 
             return connectionInnovationNumber;
@@ -301,7 +301,7 @@ namespace SmartBoyDIno.AIComponents
 
             Random random = new Random();
 
-            double random1 = random.NextDouble(0, 1);
+            double random1 = random.NextDouble();
             if (random1 < 0.8)
             {
                 foreach (var gene in genes)
@@ -310,13 +310,13 @@ namespace SmartBoyDIno.AIComponents
                 }
             }
 
-            double random2 = random.NextDouble(0, 1);
+            double random2 = random.NextDouble();
             if (random2 < 0.08)
             {
                 AddConnection(innovationHistory);
             }
 
-            double random3 = random.NextDouble(0, 1);
+            double random3 = random.NextDouble();
             if (random3 < 0.02)
             {
                 AddNode(innovationHistory);
@@ -345,13 +345,13 @@ namespace SmartBoyDIno.AIComponents
                 {
                     if (!genes[i].isEnabled || !parent2.genes[parent2Gene].isEnabled)
                     {
-                        if (random.NextDouble(0, 1) < 0.75)
+                        if (random.NextDouble() < 0.75)
                         {
                             setEnabled = false;
                         }
                     }
 
-                    if (random.NextDouble(0, 1) < 0.5)
+                    if (random.NextDouble() < 0.5)
                     {
                         childGenes.Add(genes[i]);
                     }

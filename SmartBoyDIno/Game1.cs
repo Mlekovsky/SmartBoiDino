@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using SmartBoyDIno.AIComponents;
 using SmartBoyDIno.GameObjects;
 using SmartBoyDIno.Helpers;
+using SmartBoyDIno.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,6 @@ namespace SmartBoyDIno
         Texture2D dinoDuck2;
         SpriteFont scoreFont;
         KeyboardState keyboard;
-        DinoTextures dinoTextures;
 
         List<Cactus> cactuses = new List<Cactus>();
         List<Bird> berds = new List<Bird>();
@@ -47,6 +47,12 @@ namespace SmartBoyDIno
 
         int windowWidth = 1600;
         int windowHeight = 900;
+
+        //structs
+        DinoTextures dinoTextures;
+        InfoObjectsPositions InfoObjectsPositions;
+
+        public static int nextConnectionNo = 1000;
 
         public Game1()
         {
@@ -81,15 +87,61 @@ namespace SmartBoyDIno
 
             dinoTextures = new DinoTextures(dino1, dino2, dinoDuck1, dinoDuck2, dinoJump, dinoDead, scoreFont);
             #endregion
+            InitializeInfoVectors();
 
             if (DebugClass.AiGameplay)
-                population = new Population(500, dinoTextures);
+                population = new Population(500, dinoTextures, InfoObjectsPositions);
             else
-                tempGenPlayer = new Player(dinoTextures);
+                tempGenPlayer = new Player(dinoTextures, InfoObjectsPositions);
+
 
             // tempGenPlayer = new Player(dino1, dino2, dinoDuck1, dinoDuck2, dinoJump, dinoDead, scoreFont);
+        }
 
-
+        private void InitializeInfoVectors()
+        {
+            int column1X = 50;
+            int column2X = 250;
+            int coulmn3X = 450;
+            int coulmn4x = 650;
+            InfoObjectsPositions = new InfoObjectsPositions(
+                new InfoColumn(
+                    new Vector2(column1X, 70),
+                    new Vector2(column1X, 100),
+                    new Vector2(column1X, 130),
+                    new Vector2(column1X, 160),
+                    new Vector2(column1X, 190),
+                    new Vector2(column1X, 220),
+                    new Vector2(column1X, 250),
+                    new Vector2(column1X, 280)
+                    ),
+                new InfoColumn(new Vector2(column2X, 70),
+                    new Vector2(column2X, 100),
+                    new Vector2(column2X, 130),
+                    new Vector2(column2X, 160),
+                    new Vector2(column2X, 190),
+                    new Vector2(column2X, 220),
+                    new Vector2(column2X, 250),
+                    new Vector2(column2X, 280)
+                    ),
+                new InfoColumn(new Vector2(coulmn3X, 70),
+                    new Vector2(coulmn3X, 100),
+                    new Vector2(coulmn3X, 130),
+                    new Vector2(coulmn3X, 160),
+                    new Vector2(coulmn3X, 190),
+                    new Vector2(coulmn3X, 220),
+                    new Vector2(coulmn3X, 250),
+                    new Vector2(coulmn3X, 280)
+                    ),
+                new InfoColumn(new Vector2(coulmn4x, 70),
+                    new Vector2(coulmn4x, 100),
+                    new Vector2(coulmn4x, 130),
+                    new Vector2(coulmn4x, 160),
+                    new Vector2(coulmn4x, 190),
+                    new Vector2(coulmn4x, 220),
+                    new Vector2(coulmn4x, 250),
+                    new Vector2(coulmn4x, 280))
+                );
         }
 
         protected override void UnloadContent()
@@ -207,11 +259,11 @@ namespace SmartBoyDIno
             GraphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
             spriteBatch.DrawLine(new Vector2(0, ground), new Vector2(Window.ClientBounds.Width, ground), Color.Black, 3);
-            spriteBatch.DrawString(scoreFont, $"Game speed: {gameSpeed}", new Vector2(50, 130), Color.Black);
+            spriteBatch.DrawString(scoreFont, $"Game speed: {gameSpeed}", InfoObjectsPositions.Column1.Row3, Color.Black);
 
             if (DebugClass.AiGameplay)
             {
-                spriteBatch.DrawString(scoreFont, $"Generation: {population.gen}", new Vector2(50, 160), Color.Black);
+                spriteBatch.DrawString(scoreFont, $"Generation: {population.gen}", InfoObjectsPositions.Column1.Row4, Color.Black);
                 if (!population.Done())
                     population.DrawAlive(gameTime, spriteBatch);
 
@@ -227,13 +279,13 @@ namespace SmartBoyDIno
                 cactuses[i].Draw(spriteBatch, gameTime);
                 if (DebugClass.displayObjectsInfo)
                 {
-                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Cactus", new Vector2(500, 70), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Bottom: {cactuses[0].getTextureRectangle().Bottom} ", new Vector2(500, 100), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Top: {cactuses[0].getTextureRectangle().Top} ", new Vector2(500, 130), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Left: {cactuses[0].getTextureRectangle().Left} ", new Vector2(500, 160), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Right: {cactuses[0].getTextureRectangle().Right} ", new Vector2(500, 190), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Width: {cactuses[0].getTextureRectangle().Width} ", new Vector2(500, 220), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Height: {cactuses[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Cactus", InfoObjectsPositions.Column3.Row1, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Bottom: {cactuses[0].getTextureRectangle().Bottom} ", InfoObjectsPositions.Column3.Row2, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Top: {cactuses[0].getTextureRectangle().Top} ", InfoObjectsPositions.Column3.Row3, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Left: {cactuses[0].getTextureRectangle().Left} ", InfoObjectsPositions.Column3.Row4, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Right: {cactuses[0].getTextureRectangle().Right} ", InfoObjectsPositions.Column3.Row5, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Width: {cactuses[0].getTextureRectangle().Width} ", InfoObjectsPositions.Column3.Row6, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Height: {cactuses[0].getTextureRectangle().Height} ", InfoObjectsPositions.Column3.Row7, Color.Black);
                 }
 
                 if (cactuses[i].posX < 100)
@@ -247,13 +299,13 @@ namespace SmartBoyDIno
             {
                 if (DebugClass.displayObjectsInfo)
                 {
-                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Bird", new Vector2(500, 70), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Bottom: {berds[0].getTextureRectangle().Bottom} ", new Vector2(500, 100), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Top: {berds[0].getTextureRectangle().Top} ", new Vector2(500, 130), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Left: {berds[0].getTextureRectangle().Left} ", new Vector2(500, 160), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Right: {berds[0].getTextureRectangle().Right} ", new Vector2(500, 190), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Width: {berds[0].getTextureRectangle().Width} ", new Vector2(500, 220), Color.Black);
-                    spriteBatch.DrawString(scoreFont, $"Height: {berds[0].getTextureRectangle().Height} ", new Vector2(500, 250), Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Currenct closest object: Bird", InfoObjectsPositions.Column3.Row1, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Bottom: {cactuses[0].getTextureRectangle().Bottom} ", InfoObjectsPositions.Column3.Row2, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Top: {cactuses[0].getTextureRectangle().Top} ", InfoObjectsPositions.Column3.Row3, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Left: {cactuses[0].getTextureRectangle().Left} ", InfoObjectsPositions.Column3.Row4, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Right: {cactuses[0].getTextureRectangle().Right} ", InfoObjectsPositions.Column3.Row5, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Width: {cactuses[0].getTextureRectangle().Width} ", InfoObjectsPositions.Column3.Row6, Color.Black);
+                    spriteBatch.DrawString(scoreFont, $"Height: {cactuses[0].getTextureRectangle().Height} ", InfoObjectsPositions.Column3.Row7, Color.Black);
                 }
 
                 berds[i].Draw(spriteBatch, gameTime);

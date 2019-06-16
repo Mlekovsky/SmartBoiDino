@@ -59,10 +59,12 @@
     <Compile Include="GameObjects\Cactus.cs" />
     <Compile Include="DebugClass.cs" />
     <Compile Include="GameObjects\Player.cs" />
-    <Compile Include="Helpers\DinoTextures.cs" />
+    <Compile Include="Structs\DinoTextures.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structs\InfoColumn.cs" />
+    <Compile Include="Structs\InfoObjectsPositions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

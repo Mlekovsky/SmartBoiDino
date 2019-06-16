@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SmartBoyDIno.AIComponents;
 using SmartBoyDIno.Helpers;
+using SmartBoyDIno.Structs;
 
 namespace SmartBoyDIno.GameObjects
 {
@@ -24,6 +25,7 @@ namespace SmartBoyDIno.GameObjects
         SpriteFont font;
 
         DinoTextures dinoTextures;
+        InfoObjectsPositions InfoObjectsPositions;
 
         bool duck;
         float ground = 750;
@@ -42,10 +44,11 @@ namespace SmartBoyDIno.GameObjects
         public int gen = 0;
 
         public int genomeInputs = 7;
-        int genomeOutputs = 3;
+        public int genomeOutputs = 3;
 
-        double[] vision = new double[7]; // as genome inputs
-        double[] decision = new double[3]; //as genome outputs (for nn)
+        // make them public so i can acces it from Population, to write some info without displaying it for 500x times each frame
+        public double[] vision = new double[7]; // as genome inputs
+        public double[] decision = new double[3]; //as genome outputs (for nn)
 
 
 
@@ -63,8 +66,9 @@ namespace SmartBoyDIno.GameObjects
 
             brain = new Genome(genomeInputs, genomeOutputs);
         }
-        public Player(in DinoTextures dinoTextures)
+        public Player(in DinoTextures dinoTextures, in InfoObjectsPositions infoObjectsPositions)
         {
+            this.InfoObjectsPositions = infoObjectsPositions;
             this.dinoTextures = dinoTextures;
             brain = new Genome(genomeInputs, genomeOutputs);
             posX = 150;
@@ -82,17 +86,18 @@ namespace SmartBoyDIno.GameObjects
         {
             if (currentTexture != null)
                 spriteBatch.Draw(currentTexture, new Vector2(posX - (currentTexture.Width / 2), posY - currentTexture.Height));
-            spriteBatch.DrawString(dinoTextures.font, $"Score: {score}", new Vector2(50, 100), Color.Black);
+
+            spriteBatch.DrawString(dinoTextures.font, $"Score: {score}", InfoObjectsPositions.Column1.Row2, Color.Black);
 
             if (DebugClass.displayObjectsInfo)
             {
-                spriteBatch.DrawString(dinoTextures.font, $"Player positions", new Vector2(250, 70), Color.Black);
-                spriteBatch.DrawString(dinoTextures.font, $"Bottom: {getTextureRectangle().Bottom} ", new Vector2(250, 100), Color.Black);
-                spriteBatch.DrawString(dinoTextures.font, $"Top: {getTextureRectangle().Top} ", new Vector2(250, 130), Color.Black);
-                spriteBatch.DrawString(dinoTextures.font, $"Left: {getTextureRectangle().Left} ", new Vector2(250, 160), Color.Black);
-                spriteBatch.DrawString(dinoTextures.font, $"Right: {getTextureRectangle().Right} ", new Vector2(250, 190), Color.Black);
-                spriteBatch.DrawString(dinoTextures.font, $"Width: {getTextureRectangle().Width} ", new Vector2(250, 220), Color.Black);
-                spriteBatch.DrawString(dinoTextures.font, $"Height: {getTextureRectangle().Height} ", new Vector2(250, 250), Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Player positions", InfoObjectsPositions.Column2.Row1, Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Bottom: {getTextureRectangle().Bottom} ", InfoObjectsPositions.Column2.Row2, Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Top: {getTextureRectangle().Top} ", InfoObjectsPositions.Column2.Row3, Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Left: {getTextureRectangle().Left} ", InfoObjectsPositions.Column2.Row4, Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Right: {getTextureRectangle().Right} ", InfoObjectsPositions.Column2.Row5, Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Width: {getTextureRectangle().Width} ", InfoObjectsPositions.Column2.Row6, Color.Black);
+                spriteBatch.DrawString(dinoTextures.font, $"Height: {getTextureRectangle().Height} ", InfoObjectsPositions.Column2.Row7, Color.Black);
 
                 DrawRectangle(spriteBatch);
             }
@@ -333,7 +338,7 @@ namespace SmartBoyDIno.GameObjects
                     }
                     else
                     {
-                        vision[3] = berds[minIndex].posY;
+                        vision[3] = ground - berds[minIndex].posY;
                     }
                 }
                 else
@@ -373,7 +378,7 @@ namespace SmartBoyDIno.GameObjects
             }
             else
             {
-                vision[6] = 1 / (min - closesDist);
+                vision[6] = min - closesDist;
             }
         }
 
@@ -421,6 +426,7 @@ namespace SmartBoyDIno.GameObjects
         {
             Player clone = new Player();
             clone.dinoTextures = this.dinoTextures;
+            clone.InfoObjectsPositions = this.InfoObjectsPositions;
             clone.brain = brain.Clone();
             clone.fitness = fitness;
             clone.brain.GenerateNetwork();
@@ -434,6 +440,7 @@ namespace SmartBoyDIno.GameObjects
             Player clone = new Player();
             clone.brain = this.brain.Clone();
             clone.dinoTextures = this.dinoTextures;
+            clone.InfoObjectsPositions = this.InfoObjectsPositions;
             clone.fitness = this.fitness;
             clone.gen = this.gen;
             clone.bestScore = score;
@@ -452,6 +459,7 @@ namespace SmartBoyDIno.GameObjects
             child.brain = brain.Crossover(parent2.brain);
             child.brain.GenerateNetwork();
             child.dinoTextures = parent2.dinoTextures;
+            child.InfoObjectsPositions = this.InfoObjectsPositions;
             return child;
         }
     }

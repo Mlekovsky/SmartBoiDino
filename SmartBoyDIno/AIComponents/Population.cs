@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SmartBoyDIno.GameObjects;
 using SmartBoyDIno.Helpers;
+using SmartBoyDIno.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,16 @@ namespace SmartBoyDIno.AIComponents
         public bool newStage = false;
         public int populationLife = 0;
 
-        public Population(int size, DinoTextures dinoTexture)
+        InfoObjectsPositions infoObjectsPositions;
+        DinoTextures textures; //to get font
+
+        public Population(int size, DinoTextures dinoTexture, InfoObjectsPositions infoObjectsPositions)
         {
+            this.infoObjectsPositions = infoObjectsPositions;
+            this.textures = dinoTexture;
             for (int i = 0; i < size; i++)
             {
-                pop.Add(new Player(dinoTexture));
+                pop.Add(new Player(dinoTexture, infoObjectsPositions));
                 pop[i].brain.GenerateNetwork();
                 pop[i].brain.Mutate(innovationHistory);
             }
@@ -51,6 +57,17 @@ namespace SmartBoyDIno.AIComponents
 
         public void DrawAlive(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            if (DebugClass.AiGameplayInfo)
+            {
+                spriteBatch.DrawString(textures.font, $"Player Visions:", infoObjectsPositions.Column2.Row1, Color.Black);
+                spriteBatch.DrawString(textures.font, $"0 - Distance to enemy: {pop[0].vision[0]} ", infoObjectsPositions.Column2.Row2, Color.Black);
+                spriteBatch.DrawString(textures.font, $"1 - Height of the enemy: {pop[0].vision[1]} ", infoObjectsPositions.Column2.Row3, Color.Black);
+                spriteBatch.DrawString(textures.font, $"2 - Width of the enemy: {pop[0].vision[2]} ", infoObjectsPositions.Column2.Row4, Color.Black);
+                spriteBatch.DrawString(textures.font, $"3 - Enemy above the ground value : {pop[0].vision[3]} ", infoObjectsPositions.Column2.Row5, Color.Black);
+                spriteBatch.DrawString(textures.font, $"4 - Speed: {pop[0].vision[4]} ", infoObjectsPositions.Column2.Row6, Color.Black);
+                spriteBatch.DrawString(textures.font, $"5 - Player Y position: {pop[0].vision[5]} ", infoObjectsPositions.Column2.Row7, Color.Black);
+                spriteBatch.DrawString(textures.font, $"6 - Gap between obstacles: {pop[0].vision[6]} ", infoObjectsPositions.Column2.Row8, Color.Black);
+            }
             foreach (var player in pop)
             {
                 if (!player.dead)

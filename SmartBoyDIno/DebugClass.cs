@@ -10,5 +10,6 @@ namespace SmartBoyDIno
     {
         public static bool displayObjectsInfo = false;
         public static bool AiGameplay = true;
+        public static bool AiGameplayInfo = true;
     }
 }
