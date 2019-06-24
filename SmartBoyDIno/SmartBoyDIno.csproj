@@ -51,13 +51,13 @@
     <Compile Include="AIComponents\Node.cs" />
     <Compile Include="AIComponents\Population.cs" />
     <Compile Include="AIComponents\Species.cs" />
-    <Compile Include="ExtendedMethods.cs" />
+    <Compile Include="Helpers\ExtendedMethods.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObjects\BaseEnemy.cs" />
     <Compile Include="GameObjects\BaseGameObject.cs" />
     <Compile Include="GameObjects\Bird.cs" />
     <Compile Include="GameObjects\Cactus.cs" />
-    <Compile Include="DebugClass.cs" />
+    <Compile Include="Helpers\DebugClass.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Structs\DinoTextures.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
